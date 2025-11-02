@@ -1,10 +1,11 @@
 package br.edu.cefsa.compiler.main;
 
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+
 import br.edu.cefsa.compiler.exceptions.EasySemanticException;
 import br.edu.cefsa.compiler.parser.EasyLanguageLexer;
 import br.edu.cefsa.compiler.parser.EasyLanguageParser;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
 
 
 /* esta é a classe que é responsável por criar a interação com o usuário

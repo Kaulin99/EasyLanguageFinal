@@ -11,6 +11,8 @@ package br.edu.cefsa.compiler.parser;
 	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEscrita;
 	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandAtribuicao;
 	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandDecisao;
+	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEnquanto;
+	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandPara;
 	import java.util.ArrayList;
 	import java.util.Stack;
 
@@ -112,6 +114,16 @@ public interface EasyLanguageListener extends ParseTreeListener {
 	 */
 	void exitCmdattrib(EasyLanguageParser.CmdattribContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EasyLanguageParser#atrib_rule}.
+	 * @param ctx the parse tree
+	 */
+	void enterAtrib_rule(EasyLanguageParser.Atrib_ruleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EasyLanguageParser#atrib_rule}.
+	 * @param ctx the parse tree
+	 */
+	void exitAtrib_rule(EasyLanguageParser.Atrib_ruleContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EasyLanguageParser#cmdselecao}.
 	 * @param ctx the parse tree
 	 */
@@ -121,6 +133,26 @@ public interface EasyLanguageListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCmdselecao(EasyLanguageParser.CmdselecaoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EasyLanguageParser#cmdenquanto}.
+	 * @param ctx the parse tree
+	 */
+	void enterCmdenquanto(EasyLanguageParser.CmdenquantoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EasyLanguageParser#cmdenquanto}.
+	 * @param ctx the parse tree
+	 */
+	void exitCmdenquanto(EasyLanguageParser.CmdenquantoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EasyLanguageParser#cmdpara}.
+	 * @param ctx the parse tree
+	 */
+	void enterCmdpara(EasyLanguageParser.CmdparaContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EasyLanguageParser#cmdpara}.
+	 * @param ctx the parse tree
+	 */
+	void exitCmdpara(EasyLanguageParser.CmdparaContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EasyLanguageParser#expr}.
 	 * @param ctx the parse tree

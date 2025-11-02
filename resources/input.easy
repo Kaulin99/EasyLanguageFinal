@@ -1,19 +1,24 @@
 programa
 
-  numero a, b,c;
-  texto  t1;
+  numero i;
+  numero limite;
+  texto msg;
 
-  leia(a);
-  leia(b);
-  leia(c);
-  
-  a = 1 + 2 * 3 / b;
-  
-  se ( a > b ) {
-     escreva (a);
+  msg = "Iniciando teste do laco PARA.";
+  escreva(msg);
+
+  limite = 5;
+
+  // Sintaxe do novo comando 'para'
+  // Vai contar de 0 até 4 (enquanto i < 5)
+  para (i = 0; i < limite; i = i + 1) faca {
+      
+      msg = "Valor de i:";
+      escreva(msg);
+      escreva(i);
   }
-  senao {
-     escreva (b);
-  }
   
+  msg = "Fim do laco.";
+  escreva(msg);
+
 fimprog;

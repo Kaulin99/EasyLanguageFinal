@@ -2,16 +2,18 @@ import java.util.Scanner;
 public class MainClass{ 
  public static void main(String args[]){
    Scanner _key = new Scanner(System.in);
-double  a;
-double  b;
-double  c;
-String  t1;
-a= _key.nextDouble();
-b= _key.nextDouble();
-c= _key.nextDouble();
-a = 1+2*3/b;
-if (a>b) {
-System.out.println(a);}else {
-System.out.println(b);}
+String  msg;
+double  i;
+double  limite;
+msg = "Iniciando teste do laco PARA.";
+System.out.println(msg);
+limite = 5;
+for (i = 0; i<limite; i = i+1) {
+	msg = "Valor de i:";
+	System.out.println(msg);
+	System.out.println(i);
+}
 
+msg = "Fim do laco.";
+System.out.println(msg);
  }}

@@ -11,6 +11,8 @@ package br.edu.cefsa.compiler.parser;
 	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEscrita;
 	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandAtribuicao;
 	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandDecisao;
+	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEnquanto;
+	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandPara;
 	import java.util.ArrayList;
 	import java.util.Stack;
 
@@ -139,6 +141,18 @@ public class EasyLanguageBaseListener implements EasyLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAtrib_rule(EasyLanguageParser.Atrib_ruleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAtrib_rule(EasyLanguageParser.Atrib_ruleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCmdselecao(EasyLanguageParser.CmdselecaoContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -146,6 +160,30 @@ public class EasyLanguageBaseListener implements EasyLanguageListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCmdselecao(EasyLanguageParser.CmdselecaoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCmdenquanto(EasyLanguageParser.CmdenquantoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCmdenquanto(EasyLanguageParser.CmdenquantoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCmdpara(EasyLanguageParser.CmdparaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCmdpara(EasyLanguageParser.CmdparaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

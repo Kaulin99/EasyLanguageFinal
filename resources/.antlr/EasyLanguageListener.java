@@ -1,4 +1,4 @@
-// Generated from c:/Users/082220027/Downloads/EasyLanguageFinal/EasyLanguageFinal/resources/EasyLanguage.g4 by ANTLR 4.13.1
+// Generated from c:/Users/kauea/OneDrive/Documents/GitHub/EasyLanguageFinal/resources/EasyLanguage.g4 by ANTLR 4.13.1
 
 	import br.edu.cefsa.compiler.datastructures.EasySymbol;
 	import br.edu.cefsa.compiler.datastructures.EasyVariable;
@@ -10,6 +10,7 @@
 	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEscrita;
 	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandAtribuicao;
 	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandDecisao;
+	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEnquanto;
 	import java.util.ArrayList;
 	import java.util.Stack;
 
@@ -120,6 +121,16 @@ public interface EasyLanguageListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCmdselecao(EasyLanguageParser.CmdselecaoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EasyLanguageParser#cmdenquanto}.
+	 * @param ctx the parse tree
+	 */
+	void enterCmdenquanto(EasyLanguageParser.CmdenquantoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EasyLanguageParser#cmdenquanto}.
+	 * @param ctx the parse tree
+	 */
+	void exitCmdenquanto(EasyLanguageParser.CmdenquantoContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EasyLanguageParser#expr}.
 	 * @param ctx the parse tree
