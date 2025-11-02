@@ -97,6 +97,7 @@ declaravar :  tipo ID  {
            
 tipo       : 'numero' { _tipo = EasyVariable.NUMBER;  }
            | 'texto'  { _tipo = EasyVariable.TEXT;  }
+		   | BOOLEANO { _tipo = EasyVariable.BOOLEAN; }
            ;
         
 bloco	: { curThread = new ArrayList<AbstractCommand>(); 
@@ -159,6 +160,8 @@ atrib_rule returns [CommandAtribuicao atribCmd]
 				expr
 			|
 				TEXTO { _exprContent = _input.LT(-1).getText(); }
+			|
+				(VERDADEIRO | FALSO) { _exprContent = _input.LT(-1).getText(); }
 			)
 			
 			{
@@ -169,39 +172,43 @@ atrib_rule returns [CommandAtribuicao atribCmd]
 			
 			
 cmdselecao  :  'se' AP
-                    ID    { _exprDecision = _input.LT(-1).getText(); }
-                    OPREL { _exprDecision += _input.LT(-1).getText(); }
-                    (ID | NUMBER) {_exprDecision += _input.LT(-1).getText(); }
-                    FP 
-                    ACH 
-                    { curThread = new ArrayList<AbstractCommand>(); 
-                        stack.push(curThread);
-                    }
-                    (cmd)+ 
-                    FCH
-                    {
-                       listaTrue = stack.pop();	
-                    } 
-                   ('senao' 
-                   	ACH
-                   	{
-                   	 	curThread = new ArrayList<AbstractCommand>();
-                   	 	stack.push(curThread);
-                   	} 
-                   	(cmd+) 
-                   	FCH
-                   	{
-                   		listaFalse = stack.pop();
-                   		CommandDecisao cmd = new CommandDecisao(_exprDecision, listaTrue, listaFalse);
-                   		stack.peek().add(cmd);
-                   	}
-                   )?
-            ;
+					ID    { _exprDecision = _input.LT(-1).getText(); verificaID(_exprDecision); }
+					OPREL { _exprDecision += _input.LT(-1).getText(); }
+					(ID { _exprDecision += _input.LT(-1).getText(); verificaID(_input.LT(-1).getText()); } | NUMBER | VERDADEIRO | FALSO) {_exprDecision += _input.LT(-1).getText(); }
+					FP 
+					'faca'
+					ACH 
+					{ curThread = new ArrayList<AbstractCommand>(); 
+						stack.push(curThread);
+					}
+					(cmd)+ 
+					FCH
+					{
+					   listaTrue = stack.pop();
+					} 
+				   ('senao' 
+						ACH
+						{
+						 	curThread = new ArrayList<AbstractCommand>();
+						 	stack.push(curThread);
+						} 
+						(cmd+) 
+						FCH
+						{
+							listaFalse = stack.pop();
+						}
+				   )?
+				   {
+					   // cria o comando de decisao sempre (listaFalse pode ser null)
+					   CommandDecisao cmd = new CommandDecisao(_exprDecision, listaTrue, listaFalse);
+					   stack.peek().add(cmd);
+				   }
+			;
 
 cmdenquanto : 'enquanto' AP
                 ID          { _exprEnquanto = _input.LT(-1).getText(); }
                 OPREL       { _exprEnquanto += _input.LT(-1).getText(); }
-                (ID | NUMBER) {_exprEnquanto += _input.LT(-1).getText(); }
+                (ID | NUMBER | VERDADEIRO | FALSO) {_exprEnquanto += _input.LT(-1).getText(); }
               FP 'faca' 
               ACH 
               { 
@@ -234,7 +241,7 @@ cmdpara : 'para' AP
             // 2. Condição (lógica igual ao 'se' e 'enquanto')
             ID          { _paraCondicao = _input.LT(-1).getText(); }
             OPREL       { _paraCondicao += _input.LT(-1).getText(); }
-            (ID | NUMBER) {_paraCondicao += _input.LT(-1).getText(); }
+            (ID | NUMBER | VERDADEIRO | FALSO) {_paraCondicao += _input.LT(-1).getText(); }
             SC // Ponto e vírgula depois da condição
             
             // 3. Incremento
@@ -307,6 +314,10 @@ FCH  : '}'
 	 
 OPREL : '>' | '<' | '>=' | '<=' | '==' | '!='
       ;
+
+BOOLEANO   : 'booleano';
+VERDADEIRO : 'verdadeiro';
+FALSO      : 'falso';
       
 ID	: [a-z] ([a-z] | [A-Z] | [0-9])*
 	;

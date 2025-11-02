@@ -1,24 +1,25 @@
 programa
 
-  numero i;
-  numero limite;
+  numero a;
+  booleano flag; // Testando a nova declaração
   texto msg;
 
-  msg = "Iniciando teste do laco PARA.";
+  a = 100;
+  flag = verdadeiro; // Testando a nova atribuição
+  
+  msg = "Teste Booleano:";
   escreva(msg);
 
-  limite = 5;
-
-  // Sintaxe do novo comando 'para'
-  // Vai contar de 0 até 4 (enquanto i < 5)
-  para (i = 0; i < limite; i = i + 1) faca {
-      
-      msg = "Valor de i:";
-      escreva(msg);
-      escreva(i);
+  // Testando a nova condição
+  se (flag == verdadeiro) faca {
+     msg = "Flag eh verdadeira!";
+     escreva(msg);
+     flag = falso;
   }
   
-  msg = "Fim do laco.";
-  escreva(msg);
+  se (flag == falso) faca {
+     msg = "Flag agora eh falsa!";
+     escreva(msg);
+  }
 
 fimprog;

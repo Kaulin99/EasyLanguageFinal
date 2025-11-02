@@ -4,6 +4,7 @@ public class EasyVariable extends EasySymbol {
 
     public static final int NUMBER = 0;
     public static final int TEXT = 1;
+    public static final int BOOLEAN = 2;
 
     private int type;
     private String value;
@@ -37,12 +38,21 @@ public class EasyVariable extends EasySymbol {
 
     public String generateJavaCode() {
         String str;
+        
         if (type == NUMBER) {
             str = "double ";
-        } else {
+        } 
+        else if (type == BOOLEAN) { 
+            str = "boolean ";
+        }
+        else if (type == TEXT) {
             str = "String ";
         }
-        return str + " " + super.name + ";";
+        else {
+            str = "Object "; 
+        }
+        
+        // Garante que não há espaço extra
+        return str + super.name + ";";
     }
-
 }

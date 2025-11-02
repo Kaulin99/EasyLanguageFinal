@@ -12,10 +12,19 @@ public class CommandAtribuicao extends AbstractCommand {
 
     @Override
     public String generateJavaCode() {
-        return id + " = " + expr + ";";
-    }
+        // Começa com o valor padrão
+        String translatedExpr = expr;
+        
+        // Verifica se a expressão precisa ser traduzida
+        if (expr.equals("verdadeiro")) {
+            translatedExpr = "true";
+        } else if (expr.equals("falso")) {
+            translatedExpr = "false";
+        }
 
-    @Override
+        return id + " = " + translatedExpr + ";"; 
+
+    }    @Override
     public String toString() {
         return "CommandAtribuicao [id=" + id + ", expr=" + expr + "]";
     }

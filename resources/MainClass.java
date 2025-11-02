@@ -2,18 +2,24 @@ import java.util.Scanner;
 public class MainClass{ 
  public static void main(String args[]){
    Scanner _key = new Scanner(System.in);
-String  msg;
-double  i;
-double  limite;
-msg = "Iniciando teste do laco PARA.";
+String msg;
+double a;
+boolean flag;
+a = 100;
+flag = true;
+msg = "Teste Booleano:";
 System.out.println(msg);
-limite = 5;
-for (i = 0; i<limite; i = i+1) {
-	msg = "Valor de i:";
+if (flag==true) {
+	msg = "Flag eh verdadeira!";
 	System.out.println(msg);
-	System.out.println(i);
+	flag = false;
+
 }
 
-msg = "Fim do laco.";
-System.out.println(msg);
+if (flag==false) {
+	msg = "Flag agora eh falsa!";
+	System.out.println(msg);
+
+}
+
  }}

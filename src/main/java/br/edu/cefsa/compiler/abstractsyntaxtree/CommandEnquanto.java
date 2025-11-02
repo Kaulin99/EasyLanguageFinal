@@ -18,7 +18,6 @@ public class CommandEnquanto extends AbstractCommand {
 
     @Override
     public String generateJavaCode() {
-        // Vou assumir que o alvo é parecido com Java para este exemplo.
         StringBuilder sb = new StringBuilder();
         
         // Constrói a condição do while
