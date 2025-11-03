@@ -1,25 +1,31 @@
 programa
 
-  numero a;
-  booleano flag; // Testando a nova declaração
+  numero a, i;
+  numero vet[5];
   texto msg;
 
-  a = 100;
-  flag = verdadeiro; // Testando a nova atribuição
+  a = 10;
+  i = 0;
   
-  msg = "Teste Booleano:";
+  // Teste de atribuição e acesso
+  vet[0] = a;
+  vet[1] = 20;
+  vet[i + 2] = 30; // ERRO! Expressões no índice não são suportadas (ainda)
+  
+  // Teste de leitura
+  msg = "Digite um numero para o vetor[3]:";
   escreva(msg);
-
-  // Testando a nova condição
-  se (flag == verdadeiro) faca {
-     msg = "Flag eh verdadeira!";
-     escreva(msg);
-     flag = falso;
-  }
+  leia(vet[3]);
   
-  se (flag == falso) faca {
-     msg = "Flag agora eh falsa!";
-     escreva(msg);
+  // Teste de escrita
+  msg = "O valor de vetor[1] eh:";
+  escreva(msg);
+  escreva(vet[1]);
+  
+  // Teste em condição
+  se (vet[0] < vet[1]) faca {
+      msg = "vetor[0] eh menor que vetor[1]";
+      escreva(msg);
   }
 
 fimprog;

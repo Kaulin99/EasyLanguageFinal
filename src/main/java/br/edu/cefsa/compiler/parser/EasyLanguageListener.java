@@ -1,20 +1,20 @@
 // Generated from EasyLanguage.g4 by ANTLR 4.12.0
 package br.edu.cefsa.compiler.parser;
 
-	import br.edu.cefsa.compiler.datastructures.EasySymbol;
-	import br.edu.cefsa.compiler.datastructures.EasyVariable;
-	import br.edu.cefsa.compiler.datastructures.EasySymbolTable;
-	import br.edu.cefsa.compiler.exceptions.EasySemanticException;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.EasyProgram;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.AbstractCommand;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandLeitura;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEscrita;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandAtribuicao;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandDecisao;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEnquanto;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandPara;
-	import java.util.ArrayList;
-	import java.util.Stack;
+    import br.edu.cefsa.compiler.datastructures.EasySymbol;
+    import br.edu.cefsa.compiler.datastructures.EasyVariable;
+    import br.edu.cefsa.compiler.datastructures.EasySymbolTable;
+    import br.edu.cefsa.compiler.exceptions.EasySemanticException;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.EasyProgram;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.AbstractCommand;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.CommandLeitura;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEscrita;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.CommandAtribuicao;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.CommandDecisao;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEnquanto;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.CommandPara;
+    import java.util.ArrayList;
+    import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -104,6 +104,16 @@ public interface EasyLanguageListener extends ParseTreeListener {
 	 */
 	void exitCmdescrita(EasyLanguageParser.CmdescritaContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EasyLanguageParser#designador}.
+	 * @param ctx the parse tree
+	 */
+	void enterDesignador(EasyLanguageParser.DesignadorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EasyLanguageParser#designador}.
+	 * @param ctx the parse tree
+	 */
+	void exitDesignador(EasyLanguageParser.DesignadorContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EasyLanguageParser#cmdattrib}.
 	 * @param ctx the parse tree
 	 */
@@ -123,6 +133,46 @@ public interface EasyLanguageListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAtrib_rule(EasyLanguageParser.Atrib_ruleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EasyLanguageParser#expr_logica}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpr_logica(EasyLanguageParser.Expr_logicaContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EasyLanguageParser#expr_logica}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpr_logica(EasyLanguageParser.Expr_logicaContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EasyLanguageParser#termo_logico}.
+	 * @param ctx the parse tree
+	 */
+	void enterTermo_logico(EasyLanguageParser.Termo_logicoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EasyLanguageParser#termo_logico}.
+	 * @param ctx the parse tree
+	 */
+	void exitTermo_logico(EasyLanguageParser.Termo_logicoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EasyLanguageParser#fator_logico}.
+	 * @param ctx the parse tree
+	 */
+	void enterFator_logico(EasyLanguageParser.Fator_logicoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EasyLanguageParser#fator_logico}.
+	 * @param ctx the parse tree
+	 */
+	void exitFator_logico(EasyLanguageParser.Fator_logicoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EasyLanguageParser#comparacao}.
+	 * @param ctx the parse tree
+	 */
+	void enterComparacao(EasyLanguageParser.ComparacaoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EasyLanguageParser#comparacao}.
+	 * @param ctx the parse tree
+	 */
+	void exitComparacao(EasyLanguageParser.ComparacaoContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EasyLanguageParser#cmdselecao}.
 	 * @param ctx the parse tree

@@ -1,20 +1,20 @@
 // Generated from EasyLanguage.g4 by ANTLR 4.12.0
 package br.edu.cefsa.compiler.parser;
 
-	import br.edu.cefsa.compiler.datastructures.EasySymbol;
-	import br.edu.cefsa.compiler.datastructures.EasyVariable;
-	import br.edu.cefsa.compiler.datastructures.EasySymbolTable;
-	import br.edu.cefsa.compiler.exceptions.EasySemanticException;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.EasyProgram;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.AbstractCommand;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandLeitura;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEscrita;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandAtribuicao;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandDecisao;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEnquanto;
-	import br.edu.cefsa.compiler.abstractsyntaxtree.CommandPara;
-	import java.util.ArrayList;
-	import java.util.Stack;
+    import br.edu.cefsa.compiler.datastructures.EasySymbol;
+    import br.edu.cefsa.compiler.datastructures.EasyVariable;
+    import br.edu.cefsa.compiler.datastructures.EasySymbolTable;
+    import br.edu.cefsa.compiler.exceptions.EasySemanticException;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.EasyProgram;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.AbstractCommand;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.CommandLeitura;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEscrita;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.CommandAtribuicao;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.CommandDecisao;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.CommandEnquanto;
+    import br.edu.cefsa.compiler.abstractsyntaxtree.CommandPara;
+    import java.util.ArrayList;
+    import java.util.Stack;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -129,6 +129,18 @@ public class EasyLanguageBaseListener implements EasyLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDesignador(EasyLanguageParser.DesignadorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDesignador(EasyLanguageParser.DesignadorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCmdattrib(EasyLanguageParser.CmdattribContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -148,6 +160,54 @@ public class EasyLanguageBaseListener implements EasyLanguageListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAtrib_rule(EasyLanguageParser.Atrib_ruleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpr_logica(EasyLanguageParser.Expr_logicaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpr_logica(EasyLanguageParser.Expr_logicaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTermo_logico(EasyLanguageParser.Termo_logicoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTermo_logico(EasyLanguageParser.Termo_logicoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFator_logico(EasyLanguageParser.Fator_logicoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFator_logico(EasyLanguageParser.Fator_logicoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterComparacao(EasyLanguageParser.ComparacaoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitComparacao(EasyLanguageParser.ComparacaoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

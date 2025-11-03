@@ -4,8 +4,8 @@ import br.edu.cefsa.compiler.datastructures.EasyVariable;
 
 public class CommandLeitura extends AbstractCommand {
 
-    private String id;
-    private EasyVariable var;
+    private String id; // Armazena a string completa (ex: "a" ou "vetor[i]")
+    private EasyVariable var; // Armazena a variável (para sabermos o tipo)
 
     public CommandLeitura(String id, EasyVariable var) {
         this.id = id;
@@ -14,13 +14,26 @@ public class CommandLeitura extends AbstractCommand {
 
     @Override
     public String generateJavaCode() {
-        // TODO Auto-generated method stub
-        return id + "= _key." + (var.getType() == EasyVariable.NUMBER ? "nextDouble();" : "nextLine();");
+        // Gera o comando de scanner correto com base no tipo
+        String scanCmd = "";
+        switch (var.getType()) {
+            case EasyVariable.NUMBER:
+                scanCmd = "_key.nextDouble();";
+                break;
+            case EasyVariable.TEXT:
+                scanCmd = "_key.nextLine();";
+                break;
+            case EasyVariable.BOOLEAN:
+                scanCmd = "_key.nextBoolean();";
+                break;
+            default:
+                scanCmd = "_key.next();"; // Fallback
+        }
+        return id + " = " + scanCmd + "\n";
     }
 
     @Override
     public String toString() {
-        return "CommandLeitura [id=" + id + "]";
+        return "CommandLeitura [id=" + id + ", type=" + var.getType() + "]";
     }
-
 }

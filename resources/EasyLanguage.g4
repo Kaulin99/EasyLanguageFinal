@@ -73,30 +73,54 @@ prog    : 'programa' decl bloco 'fimprog;'
 decl    :   (declaravar)+
         ;
         
-declaravar :    tipo ID {
-                        _varName = _input.LT(-1).getText();
-                        _varValue = null;
-                        symbol = new EasyVariable(_varName, _tipo, _varValue);
-                        if (!symbolTable.exists(_varName)){
-                            symbolTable.add(symbol);    
-                        }
-                        else{
-                            throw new EasySemanticException("Symbol "+_varName+" already declared");
-                        }
-                    } 
-                (   VIR 
-                    ID {
-                        _varName = _input.LT(-1).getText();
-                        _varValue = null;
-                        symbol = new EasyVariable(_varName, _tipo, _varValue);
-                        if (!symbolTable.exists(_varName)){
-                            symbolTable.add(symbol);    
-                        }
-                        else{
-                            throw new EasySemanticException("Symbol "+_varName+" already declared");
-                        }
+declaravar : tipo 
+               // Processa o PRIMEIRO identificador
+               ID {
+                   _varName = _input.LT(-1).getText();
+                   _varValue = null;
+                   symbol = new EasyVariable(_varName, _tipo, _varValue); // Assume que é simples
+               }
+               // VERIFICA SE É UM VETOR (opcional)
+               ( 
+                 AC n=NUMBER FC {
+                    // Se for um vetor, cria o símbolo de vetor
+                    int size = Integer.parseInt($n.getText());
+                    symbol = new EasyVariable(_varName, _tipo, size);
+                 }
+               )?
+               {
+                  // Adiciona o primeiro símbolo (seja simples ou vetor)
+                  if (!symbolTable.exists(_varName)){
+                      symbolTable.add(symbol);    
+                  } else {
+                      throw new EasySemanticException("Symbol "+_varName+" already declared");
+                  }
+               }
+
+               // Processa os OUTROS identificadores (opcional)
+               ( 
+                 VIR 
+                 ID {
+                    _varName = _input.LT(-1).getText();
+                    _varValue = null;
+                    symbol = new EasyVariable(_varName, _tipo, _varValue); // Assume que é simples
+                 }
+                 // VERIFICA SE É UM VETOR (opcional)
+                 (
+                   AC n=NUMBER FC {
+                     int size = Integer.parseInt($n.getText());
+                     symbol = new EasyVariable(_varName, _tipo, size);
+                   }
+                 )?
+                 {
+                    // Adiciona o símbolo (seja simples ou vetor)
+                    if (!symbolTable.exists(_varName)){
+                        symbolTable.add(symbol);    
+                    } else {
+                        throw new EasySemanticException("Symbol "+_varName+" already declared");
                     }
-                )* SC
+                 }
+               )* SC
             ;
             
 tipo        : 'numero' { _tipo = EasyVariable.NUMBER;   }
@@ -119,23 +143,20 @@ cmd     :   cmdleitura
         ;
         
 cmdleitura  : 'leia' AP
-                        ID { verificaID(_input.LT(-1).getText());
-                             _readID = _input.LT(-1).getText();
-                           } 
-                        FP 
-                        SC 
-                  {
-                     EasyVariable var = (EasyVariable)symbolTable.get(_readID);
-                     CommandLeitura cmd = new CommandLeitura(_readID, var);
-                     stack.peek().add(cmd);
-                  }   
-                ;
-                
+              d=designador { _readID = $d.str; } // Usa 'designador'
+              FP 
+              SC 
+              {
+                 // Passa a string ("vetor[i]") e a variável base (para tipo)
+                 EasyVariable var = (EasyVariable)symbolTable.get($d.baseName);
+                 CommandLeitura cmd = new CommandLeitura($d.str, var);
+                 stack.peek().add(cmd);
+              }   
+            ;
+            
 cmdescrita  : 'escreva' 
                 AP 
-                ID { verificaID(_input.LT(-1).getText());
-                     _writeID = _input.LT(-1).getText();
-                   } 
+                d=designador { _writeID = $d.str; } // Usa 'designador'
                 FP 
                 SC
               {
@@ -143,6 +164,49 @@ cmdescrita  : 'escreva'
                  stack.peek().add(cmd);
               }
             ;
+
+designador returns [String str, String baseName, boolean isIndexed]
+        @init {
+            EasyVariable var;
+        }
+        : ID {
+            $baseName = $ID.text;
+            verificaID($baseName);
+            $str = $baseName; // String padrão
+            $isIndexed = false;
+            var = (EasyVariable)symbolTable.get($baseName);
+        }
+        ( // Bloco opcional para acesso a vetor
+            AC {
+                if (!var.isVector()) {
+                    throw new EasySemanticException("Symbol "+$baseName+" is not a vector and cannot be accessed with []");
+                }
+                $isIndexed = true;
+            }
+            (
+                // Opção 1: Índice é uma variável (ex: i)
+                i=ID {
+                    verificaID($i.text);
+                    EasyVariable indexVar = (EasyVariable)symbolTable.get($i.text);
+                    if (indexVar.getType() != EasyVariable.NUMBER) {
+                        throw new EasySemanticException("Vector index "+$i.text+" is not a 'numero'");
+                    }
+                    $str += "[" + $i.text + "]"; // Gera "vetor[i]"
+                }
+            |
+                // Opção 2: Índice é um número literal (ex: 5)
+                n=NUMBER {
+                    int index = Integer.parseInt($n.text);
+                    // Verificação de limites
+                    if (index < 0 || index >= var.getVectorSize()) {
+                        throw new EasySemanticException("Vector index "+index+" out of bounds for "+$baseName+"[0.."+(var.getVectorSize()-1)+"]");
+                    }
+                    $str += "[" + $n.text + "]"; // Gera "vetor[5]"
+                }
+            )
+            FC
+        )? // O bloco de acesso é opcional
+        ;
             
 cmdattrib
         :   atrib_rule SC 
@@ -152,26 +216,27 @@ cmdattrib
         ;
     
 atrib_rule returns [CommandAtribuicao atribCmd]
-        :   ID { verificaID(_input.LT(-1).getText());
-                 _exprID = _input.LT(-1).getText();
-               } 
+        :   d=designador { // Usa 'designador'
+                EasyVariable var = (EasyVariable)symbolTable.get($d.baseName);
+                // Verificação semântica: não podemos atribuir a um vetor inteiro
+                if (var.isVector() && !$d.isIndexed) {
+                    throw new EasySemanticException("Cannot assign value to whole vector '"+$d.baseName+"'. Specify an index [].");
+                }
+                _exprID = $d.str; // _exprID agora é "a" ou "vetor[i]"
+            } 
             ATTR 
             { _exprContent = ""; } 
             (
-                expr    // Expressão matemática
+                expr
             |
-                TEXTO { _exprContent = _input.LT(-1).getText(); } // Valor de Texto
+                TEXTO { _exprContent = _input.LT(-1).getText(); }
             |
-                (VERDADEIRO | FALSO) { _exprContent = _input.LT(-1).getText(); } // Valor Booleano
+                (VERDADEIRO | FALSO) { _exprContent = _input.LT(-1).getText(); }
             )
             {
                 $atribCmd = new CommandAtribuicao(_exprID, _exprContent);
             }
         ;
-
-/*
- * --- SEÇÃO DE EXPRESSÃO LÓGICA (para 'se', 'enquanto', 'para') ---
- */
 
 expr_logica returns [String str]
         : t1=termo_logico { $str = $t1.str; }
@@ -184,35 +249,58 @@ termo_logico returns [String str]
         ;
 
 fator_logico returns [String str]
-        : NAO nao_f=fator_logico { $str = "!(" + $nao_f.str + ")"; }
-        | AP expr_f=expr_logica FP { $str = "(" + $expr_f.str + ")"; }
+        : NAO f=fator_logico { $str = "!(" + $f.str + ")"; }
+        | AP e=expr_logica FP { $str = "(" + $e.str + ")"; }
         | c=comparacao { $str = $c.str; }
-        | v=(ID | VERDADEIRO | FALSO) { 
-              if ($v.type == ID) verificaID($v.getText());
-              $str = $v.getText().equals("verdadeiro") ? "true" : 
-                     $v.getText().equals("falso") ? "false" : 
-                     $v.getText(); 
+        | d=designador { // Acesso simples (ex: 'se (flag)' ou 'se (vetor[i])')
+              EasyVariable var = (EasyVariable)symbolTable.get($d.baseName);
+              if (var.isVector() && !$d.isIndexed) {
+                   throw new EasySemanticException("Cannot use whole vector '"+$d.baseName+"' in a boolean expression");
+              }
+              if (var.getType() != EasyVariable.BOOLEAN) {
+                   throw new EasySemanticException("Cannot use non-boolean variable '"+$d.str+"' in a boolean expression");
+              }
+              
+              String val = $d.str;
+              $str = val.equals("verdadeiro") ? "true" :
+                     val.equals("falso") ? "false" :
+                     val;
+          }
+        | v=(VERDADEIRO | FALSO) { // Literal (ex: 'se (verdadeiro)')
+             String val = $v.getText();
+             $str = val.equals("verdadeiro") ? "true" : "false";
           }
         ;
 
 comparacao returns [String str]
-        : (ID | NUMBER) { 
-              if (_input.LT(-1).getType() == ID) verificaID(_input.LT(-1).getText());
-              // Pega o valor (ex: "flag" ou "5")
-              $str = _input.LT(-1).getText(); 
+        : ( d1=designador { // Lado Esquerdo
+              EasyVariable var = (EasyVariable)symbolTable.get($d1.baseName);
+              if (var.isVector() && !$d1.isIndexed) {
+                  throw new EasySemanticException("Cannot use whole vector '"+$d1.baseName+"' in a comparison");
+              }
+              $str = $d1.str;
           }
-          OPREL { $str += _input.LT(-1).getText(); } // Pega o operador (ex: "==")
+        | n1=NUMBER { $str = $n1.getText(); } 
+        )
+        
+          OPREL { $str += _input.LT(-1).getText(); } 
           
-          (ID | NUMBER | VERDADEIRO | FALSO) { 
-              if (_input.LT(-1).getType() == ID) verificaID(_input.LT(-1).getText());
-              
-              // **AQUI ESTÁ A CORREÇÃO**
-              // Aplica a mesma lógica de tradução do fator_logico
-              String val = _input.LT(-1).getText();
+        ( d2=designador { // Lado Direito
+              EasyVariable var = (EasyVariable)symbolTable.get($d2.baseName);
+              if (var.isVector() && !$d2.isIndexed) {
+                  throw new EasySemanticException("Cannot use whole vector '"+$d2.baseName+"' in a comparison");
+              }
+              String val = $d2.str;
               $str += val.equals("verdadeiro") ? "true" :
                       val.equals("falso") ? "false" :
                       val;
           }
+        | n2=NUMBER { $str += $n2.getText(); } 
+        | v=(VERDADEIRO | FALSO) { // Lado direito pode ser um booleano
+              String val = $v.getText();
+              $str += val.equals("verdadeiro") ? "true" : "false";
+          }
+        )
         ;
 
 /*
@@ -307,11 +395,20 @@ expr        :   termo (
                     )*
             ;
             
-termo       : ID { verificaID(_input.LT(-1).getText());
-                   _exprContent += _input.LT(-1).getText();
+termo       : d=designador { 
+                   EasyVariable var = (EasyVariable)symbolTable.get($d.baseName);
+                   // Verificação semântica: não pode usar vetor inteiro em matemática
+                   if (var.isVector() && !$d.isIndexed) {
+                       throw new EasySemanticException("Cannot use whole vector '"+$d.baseName+"' in a math expression");
+                   }
+                   // Verificação semântica: não pode usar texto/booleano em matemática
+                   if (var.getType() != EasyVariable.NUMBER) {
+                        throw new EasySemanticException("Cannot use non-numeric variable '"+$d.str+"' in a math expression");
+                   }
+                   _exprContent += $d.str;
                  } 
             | 
-              NUMBER
+              NUMBER 
               {
                 _exprContent += _input.LT(-1).getText();
               }
@@ -328,6 +425,8 @@ ATTR : '=';
 VIR  : ',';
 ACH  : '{';
 FCH  : '}';
+AC   : '['; 
+FC   : ']'; 
      
 OPREL : '>' | '<' | '>=' | '<=' | '==' | '!=' ;
 
